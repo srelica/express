@@ -115,4 +115,9 @@ router.post("/add", adminRequired, function (req, res, next) {
     }
 });
 
+// GET /competitions/apply
+router.get("/apply", function (req, res, next) {
+    res.render("competitions/apply", { result: { display_form: true } });
+});
+
 module.exports = router;
