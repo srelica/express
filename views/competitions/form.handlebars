@@ -48,4 +48,36 @@
         </div>
     </div>
     {{/if}}
+    
+    {{#if result.applied}}
+    <div class="mt-4">
+        <div class="card w-96 bg-primary text-primary-content">
+            <div class="card-body">
+                <h2 class="card-title">Uspjeh!</h2>
+                <p>
+                    Uspjesno ste se prijavili na natjecanje!
+                </p>
+                <div class="card-actions justify-end">
+                    <a class="btn" href="/competitions">Nastavi na prikaz natjecanja</a>
+                </div>
+            </div>
+        </div>
+    </div>
+    {{/if}}
+
+    {{#if result.alreadyApplied}}
+    <div class="mt-4">
+        <div class="card w-96 bg-primary text-primary-content">
+            <div class="card-body">
+                <h2 class="card-title">Greska!</h2>
+                <p>
+                    Vec ste prijavljeni na ovo natjecanje!
+                </p>
+                <div class="card-actions justify-end">
+                    <a class="btn" href="/competitions">Nastavi na prikaz natjecanja</a>
+                </div>
+            </div>
+        </div>
+    </div>
+    {{/if}}
 </div>

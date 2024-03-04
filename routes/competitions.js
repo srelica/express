@@ -115,9 +115,29 @@ router.post("/add", adminRequired, function (req, res, next) {
     }
 });
 
-// GET /competitions/apply
-router.get("/apply", function (req, res, next) {
-    res.render("competitions/apply", { result: { display_form: true } });
+// GET /competitions/apply/:id
+router.get("/apply/:id", function (req, res, next) {
+    const result = schema_id.validate(req.params);
+    if(result.error) {
+        throw new Error("Neispravan poziv");
+    }
+    const stmt2 = db.prepare("SELECT * FROM applications WHERE user_id = ? AND competition_id = ?");
+    const dbResult = stmt2.get(req.user.sub, req.params.id);
+
+    if(dbResult) {
+        res.render("competitions/form", {result: {alreadyApplied: true}});
+    }
+    else {
+        const stmt = db.prepare("INSERT INTO applications(user_id, competition_id, applied_at) VALUES (?, ?, ?);");
+        const applyResult = stmt.run(req.user.sub, req.params.id, new Date().toISOString());
+
+        if(applyResult.changes && applyResult.changes === 1) {
+            res.render("competitions/form", {result: {applied : true}});
+        }
+        else {
+            res.render("competitions/form", {result: {database_error : true}});
+        }
+    }
 });
 
 module.exports = router;
