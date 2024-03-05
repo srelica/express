@@ -140,4 +140,40 @@ router.get("/apply/:id", function (req, res, next) {
     }
 });
 
+// GET /competitions/score/:id
+router.get("/score/:id", function (req, res, next) {
+    const result = schema_id.validate(req.params);
+    if (result.error) {
+        throw new Error("Neispravan poziv");
+    }
+    const stmt = db.prepare(`
+        SELECT a.id, u.name AS natjecatelj, a.applied_at, a.score, c.name AS natjecanje
+        FROM users u, applications a, competitions c
+        WHERE a.user_id = u.id AND a.competition_id = c.id AND c.id = ?
+        ORDER BY a.score
+    `);
+    const dbResult = stmt.all(req.params.id);
+
+    res.render("competitions/score", { result: { items: dbResult } });
+
+});
+
+// POST /competitions/score/:id
+router.post("/score/:id", authRequired, function (req, res, next) {
+    const result = schema_edit.validate(req.body);
+    if (result.error) {
+        res.render("competitions/form", { result: { validation_error: true, display_form: true } });
+        return;
+    }
+
+    const stmt = db.prepare("UPDATE applications SET score = ? WHERE id = ?;")
+    const updateResult = stmt.run(req.body);
+
+    if (updateResult.changes && updateResult.changes === 1) {
+        res.redirect("/competitions");
+    } else {
+        res.render("competitions/form", { result: { database_error: true } });
+    }
+});
+
 module.exports = router;
