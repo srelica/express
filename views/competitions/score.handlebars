@@ -1,34 +1,37 @@
 <div class="overflow-x-auto">
-        <table class="table">
-            <!-- head -->
-            <thead>
-                <tr>
-                    <th>ID prijave</th>
-                    <th>Ime natjecatelja</th>
-                    <th>Ime natjecanja</th>
-                    <th>Prijavljen u</th>
-                    <th>Broj bodova</th>
-                    <th>Unos bodova</th>
-                </tr>
-            </thead>
-            <!-- body -->
-            <tbody>
-                {{#each result.items}}
-                <tr>
-                    <th>{{this.id}}</th>
-                    <td>{{this.natjecatelj}}</td>
-                    <td>{{this.natjecanje}}</td>
-                    <td x-data="{}">
-                        <span x-text="new Date('{{this.applied_at}}').toLocaleString()"></span>
-                    </td>
-                    <td>{{this.score}}</td>
-                    <td class="flex flex-wrap gap-2">
+    <table class="table">
+        <!-- head -->
+        <thead>
+            <tr>
+                <th>ID prijave</th>
+                <th>Ime natjecatelja</th>
+                <th>Ime natjecanja</th>
+                <th>Prijavljen u</th>
+                <th>Broj bodova</th>
+                <th>Unos bodova</th>
+            </tr>
+        </thead>
+        <!-- body -->
+        <tbody>
+            {{#each result.items}}
+            <tr>
+                <th>{{this.id}}</th>
+                <td>{{this.natjecatelj}}</td>
+                <td>{{this.natjecanje}}</td>
+                <td x-data="{}">
+                    <span x-text="new Date('{{this.applied_at}}').toLocaleString()"></span>
+                </td>
+                <td>{{this.score}}</td>
+                <td class="flex flex-wrap gap-2">
+                    <form method = "post" action = "/competitions/scoreUpdate/{{this.id}}">
                         <input type="submit" class="btn btn-primary" value="Potvrdi" />
-                        <input type="password" name="password" placeholder="Unesite broj bodova"
-                        class="input input-bordered w-full max-w-xs" />
-                    </td>
-                </tr>
-                {{/each}}
-            </tbody>
-        </table>
-    </div>
+                        <input placeholder="Unesite broj bodova"
+                            class="input input-bordered max-w-xs" name = "score"/>
+                        <input type="text" name="competition_id" hidden="" value="{{this.competition_id}}" />
+                    </form>
+                </td>
+            </tr>
+            {{/each}}
+        </tbody>
+    </table>
+</div>

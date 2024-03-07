@@ -147,7 +147,7 @@ router.get("/score/:id", function (req, res, next) {
         throw new Error("Neispravan poziv");
     }
     const stmt = db.prepare(`
-        SELECT a.id, u.name AS natjecatelj, a.applied_at, a.score, c.name AS natjecanje
+        SELECT a.id, u.name AS natjecatelj, a.applied_at, a.score, c.name AS natjecanje, a.competition_id
         FROM users u, applications a, competitions c
         WHERE a.user_id = u.id AND a.competition_id = c.id AND c.id = ?
         ORDER BY a.score
@@ -159,21 +159,18 @@ router.get("/score/:id", function (req, res, next) {
 });
 
 // POST /competitions/score/:id
-router.post("/score/:id", authRequired, function (req, res, next) {
-    const result = schema_edit.validate(req.body);
+router.post("/scoreUpdate/:id", authRequired, function (req, res, next) {
+    const result = schema_id.validate(req.params);
     if (result.error) {
-        res.render("competitions/form", { result: { validation_error: true, display_form: true } });
-        return;
+        throw new Error("Neispravan poziv");
     }
-
     const stmt = db.prepare("UPDATE applications SET score = ? WHERE id = ?;")
-    const updateResult = stmt.run(req.body);
+    const updateResult = stmt.run(req.body.score, req.params.id);
 
-    if (updateResult.changes && updateResult.changes === 1) {
-        res.redirect("/competitions");
-    } else {
-        res.render("competitions/form", { result: { database_error: true } });
+    if (!updateResult) {
+        throw new Error("Neispravan poziv");
     }
+    res.redirect("/competitions/score/" + req.body.competition_id);
 });
 
 module.exports = router;

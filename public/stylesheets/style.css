@@ -1904,11 +1904,6 @@ html {
   display: none;
 }
 
-.h-max {
-  height: -moz-max-content;
-  height: max-content;
-}
-
 .min-h-screen {
   min-height: 100vh;
 }
@@ -1919,31 +1914,6 @@ html {
 
 .w-full {
   width: 100%;
-}
-
-.w-max {
-  width: -moz-max-content;
-  width: max-content;
-}
-
-.w-3 {
-  width: 0.75rem;
-}
-
-.w-10 {
-  width: 2.5rem;
-}
-
-.w-80 {
-  width: 20rem;
-}
-
-.w-40 {
-  width: 10rem;
-}
-
-.w-20 {
-  width: 5rem;
 }
 
 .max-w-md {
