@@ -30,8 +30,11 @@ router.get("/delete/:id", adminRequired, function (req, res, next) {
         throw new Error("Neispravan poziv");
     }
 
-    const stmt = db.prepare("DELETE FROM competitions WHERE id = ?;");
-    const deleteResult = stmt.run(req.params.id);
+    const stmt = db.prepare("DELETE FROM applications WHERE competition_id = ?");
+    const deleteApplications = stmt.run(req.params.id)
+
+    const stmt2 = db.prepare("DELETE FROM competitions WHERE id = ?;");
+    const deleteResult = stmt2.run(req.params.id);
 
     if (!deleteResult.changes || deleteResult.changes !== 1) {
         throw new Error("Operacija nije uspjela");
@@ -171,6 +174,22 @@ router.post("/scoreUpdate/:id", authRequired, function (req, res, next) {
         throw new Error("Neispravan poziv");
     }
     res.redirect("/competitions/score/" + req.body.competition_id);
+});
+
+//GET /competitions/printLayout/:id
+router.get("/printLayout/:id", function (req, res, next) {
+    const result = schema_id.validate(req.params);
+    if (result.error) {
+        throw new Error("Neispravan poziv");
+    }
+    const stmt = db.prepare(`
+        SELECT a.id, u.name AS natjecatelj, a.applied_at, a.score, c.name AS natjecanje, a.competition_id
+        FROM users u, applications a, competitions c
+        WHERE a.user_id = u.id AND a.competition_id = c.id AND c.id = ?
+        ORDER BY a.score
+    `);
+    const dbResult = stmt.all(req.params.id);
+    res.render("competitions/printLayout", {result: {items: dbResult}})
 });
 
 module.exports = router;

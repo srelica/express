@@ -1,0 +1,31 @@
+<div class="overflow-x-auto">
+    <table class="table">
+        <!-- head -->
+        <thead>
+            <tr>
+                <th>RB</th>
+                <th>Ime natjecatelja</th>
+                <th>Ime natjecanja</th>
+                <th>Prijavljen u</th>
+                <th>Broj bodova</th>
+            </tr>
+        </thead>
+        <!-- body -->
+        <tbody>
+            {{#each result.items}}
+            <tr>
+                <td x-data="{}">
+                    <span x-text="{{@index}}+1"></span>.
+                </td>
+                <td>{{this.natjecatelj}}</td>
+                <td>{{this.natjecatelj}}</td>
+                <td>{{this.natjecanje}}</td>
+                <td x-data="{}">
+                    <span x-text="new Date('{{this.applied_at}}').toLocaleString()"></span>
+                </td>
+                <td>{{this.score}}</td>
+            </tr>
+            {{/each}}
+        </tbody>
+    </table>
+</div>
