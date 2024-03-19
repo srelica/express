@@ -183,13 +183,13 @@ router.get("/printLayout/:id", function (req, res, next) {
         throw new Error("Neispravan poziv");
     }
     const stmt = db.prepare(`
-        SELECT a.id, u.name AS natjecatelj, a.applied_at, a.score, c.name AS natjecanje, a.competition_id
+        SELECT a.id, u.name AS natjecatelj, c.apply_till, a.score, c.name AS natjecanje, a.competition_id
         FROM users u, applications a, competitions c
         WHERE a.user_id = u.id AND a.competition_id = c.id AND c.id = ?
-        ORDER BY a.score
+        ORDER BY a.score DESC
     `);
     const dbResult = stmt.all(req.params.id);
-    res.render("competitions/printLayout", {result: {items: dbResult}})
+    res.render("competitions/printLayout", {result: {items: dbResult, printLayout: true}})
 });
 
 module.exports = router;
