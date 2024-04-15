@@ -18,7 +18,8 @@
     "http-errors": "~1.6.3",
     "joi": "^17.11.0",
     "jsonwebtoken": "^9.0.2",
-    "morgan": "~1.9.1"
+    "morgan": "~1.9.1",
+    "npm": "^10.5.2"
   },
   "devDependencies": {
     "@tailwindcss/forms": "^0.5.7",

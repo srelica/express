@@ -134,6 +134,13 @@ router.get("/apply/:id", function (req, res, next) {
         const stmt = db.prepare("INSERT INTO applications(user_id, competition_id, applied_at) VALUES (?, ?, ?);");
         const applyResult = stmt.run(req.user.sub, req.params.id, new Date().toISOString());
 
+        const stmt2 = db.prepare("SELECT name FROM competitions WHERE id = ?;");
+        const imeUsera = stmt2.all(req.params.id);
+
+        const stmt3 = db.prepare("INSERT INTO inbox(authorID, message, competitionID) VALUES (?, ?, ?);")
+        const posliPoruku = stmt3.run(req.user.sub, 'Nova prijava na natjecanje: ' + imeUsera[0].name, req.params.id);
+
+
         if(applyResult.changes && applyResult.changes === 1) {
             res.render("competitions/form", {result: {applied : true}});
         }

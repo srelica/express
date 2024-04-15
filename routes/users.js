@@ -168,4 +168,10 @@ router.post("/signup", function (req, res, next) {
   return;
 });
 
+router.get("/inbox", function (req, res, next) {
+  const stmt = db.prepare("SELECT u.name AS posiljatelj, i.message AS poruka FROM inbox i, users u WHERE u.id = i.authorID")
+  const poruke = stmt.all();
+  res.render("users/inbox", {result: {items: poruke}});
+});
+
 module.exports = router;
