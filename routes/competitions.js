@@ -135,10 +135,10 @@ router.get("/apply/:id", function (req, res, next) {
         const applyResult = stmt.run(req.user.sub, req.params.id, new Date().toISOString());
 
         const stmt2 = db.prepare("SELECT name FROM competitions WHERE id = ?;");
-        const imeUsera = stmt2.all(req.params.id);
+        const imeUsera = stmt2.get(req.params.id);
 
         const stmt3 = db.prepare("INSERT INTO inbox(authorID, message, competitionID) VALUES (?, ?, ?);")
-        const posliPoruku = stmt3.run(req.user.sub, 'Nova prijava na natjecanje: ' + imeUsera[0].name, req.params.id);
+        const posliPoruku = stmt3.run(req.user.sub, 'Nova prijava na natjecanje: ' + imeUsera.name, req.params.id);
 
 
         if(applyResult.changes && applyResult.changes === 1) {

@@ -174,4 +174,14 @@ router.get("/inbox", function (req, res, next) {
   res.render("users/inbox", {result: {items: poruke}});
 });
 
+router.get("/sendMessageForm", function (req, res, next) {
+  res.render("users/sendMessageForm", {result: {display_form: true}});
+});
+
+router.post("/sendMessage", function (req, res, next) {
+  const stmt = db.prepare("INSERT INTO inbox(authorID, message) VALUES (?, ?)")
+  const sendMessage = stmt.run(req.user.sub, req.body.message);
+  res.render("users/sendMessageForm", {result: {success:true}});
+});
+
 module.exports = router;
